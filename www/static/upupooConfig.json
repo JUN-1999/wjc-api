@@ -1,5 +1,5 @@
 ﻿var upupooConfig = {
-	'bgImg' : './original.jpg',
+	'bgImg' : './original.jpeg',
 	'type':{
 		'key':'3',
 		'value': '3',
