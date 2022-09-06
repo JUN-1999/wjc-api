@@ -36,13 +36,13 @@ exports.model = {
   },
   mysql: {
     handle: mysql,
-    database: '',
-    prefix: 'think_',
+    database: 'guagua',
+    prefix: '',
     encoding: 'utf8',
-    host: '127.0.0.1',
-    port: '',
-    user: 'root',
-    password: 'root',
+    host: '110.40.194.104',
+    port: '3306',
+    user: 'guagua',
+    password: 'jun3290',
     dateStrings: true
   }
 };
