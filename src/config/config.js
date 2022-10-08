@@ -1,5 +1,6 @@
 // default config
 module.exports = {
-    port:3290,
-    workers: 1
+  stickyCluster: true,
+  port: 3290,
+  workers: 1
 };
