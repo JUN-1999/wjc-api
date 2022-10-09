@@ -116,7 +116,7 @@ exports.websocket = {
   socketio: {
     handle: socketio,
     allowOrigin: '', // 默认所有的域名都允许访问
-    path: '/socket.io', // 默认 '/socket.io'
+    path: '', // 默认 '/socket.io'
     adapter: null, // 默认无 adapter
     messages: {
       open: '/websocket/open', // 建立连接时处理对应到 websocket Controller 下的 open Action
