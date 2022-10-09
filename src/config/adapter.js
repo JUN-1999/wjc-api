@@ -2,7 +2,7 @@ const fileCache = require('think-cache-file');
 const nunjucks = require('think-view-nunjucks');
 const fileSession = require('think-session-file');
 const mysql = require('think-model-mysql');
-const {Console, File, DateFile} = require('think-logger3');
+const { Console, File, DateFile } = require('think-logger3');
 const path = require('path');
 const isDev = think.env === 'development';
 const socketio = require('think-websocket-socket.io');
@@ -32,7 +32,7 @@ exports.model = {
   common: {
     logConnect: isDev,
     logSql: isDev,
-    logger: msg => think.logger.info(msg)
+    logger: (msg) => think.logger.info(msg)
   },
   mysql: {
     handle: mysql,
@@ -120,7 +120,8 @@ exports.websocket = {
     adapter: null, // 默认无 adapter
     messages: {
       open: '/websocket/open', // 建立连接时处理对应到 websocket Controller 下的 open Action
-      close: '/websocket/close' // 关闭连接时处理的 Action
+      close: '/websocket/close', // 关闭连接时处理的 Action
+      setMessage: '/websocket/setMessage' // 发送信息
     }
   }
 };
