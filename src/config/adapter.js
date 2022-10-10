@@ -121,7 +121,9 @@ exports.websocket = {
     messages: {
       open: '/websocket/open', // 建立连接时处理对应到 websocket Controller 下的 open Action
       close: '/websocket/close', // 关闭连接时处理的 Action
-      setMessage: '/websocket/setMessage' // 发送信息
+      setMessage: '/websocket/setMessage', // 发送信息
+      message: '/websocket/message', // 发送信息
+      room: '/websocket/room' // 进入房间
     }
   }
 };
