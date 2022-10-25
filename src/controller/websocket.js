@@ -8,8 +8,8 @@ module.exports = class extends think.Controller {
   }
   // 开启了链接
   openAction() {
-    think.logger.info('opend');
-    think.logger.info('获取客户端opend事件发送的数据', this.wsData);
+    // think.logger.info('opend');
+    // think.logger.info('获取客户端opend事件发送的数据', this.wsData);
 
     // 单个发送
     this.emit('opend', '开启了链接');
