@@ -21,10 +21,26 @@ module.exports = class extends think.Controller {
       socket: this.socket
     };
 
+    // 存储房间信息
+    if (global.rooms[this.wsData.room]) {
+      global.rooms[this.wsData.room][this.socket.id] = {
+        nickname: this.wsData.nickname,
+        socket: this.socket
+      };
+    } else {
+      global.rooms[this.wsData.room] = {
+        [this.socket.id]: {
+          nickname: this.wsData.nickname,
+          socket: this.socket
+        }
+      };
+    }
+    think.logger.info(global.rooms);
     this.socket.broadcast.emit('room', {
       nickname: this.wsData.nickname,
       type: 'in',
-      id: this.socket.id
+      id: this.socket.id,
+      room: this.wsData.room
     });
   }
 
@@ -44,7 +60,8 @@ module.exports = class extends think.Controller {
       nickname: this.wsData.nickname,
       type: 'message',
       message: this.wsData.message,
-      id: this.socket.id
+      id: this.socket.id,
+      room: this.wsData.room
     });
   }
 
