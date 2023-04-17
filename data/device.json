@@ -1,0 +1,18 @@
+{
+  "--begin--": "该设备为随机生成，丢失后不能得到原先配置",
+  "product": "ILPP-19057",
+  "device": "D85FE",
+  "board": "64ECB",
+  "brand": "C800",
+  "model": "ILPP 0E9C",
+  "wifi_ssid": "HUAWEI-1e9d7d4",
+  "bootloader": "U-boot",
+  "android_id": "IL.9205482.8551",
+  "boot_id": "66fdaedb-b99f-5abd-9159-519709269c3d",
+  "proc_version": "Linux version 5.10.101-android12-8b0f23b8",
+  "mac_address": "2D:18:8C:27:0A:4C",
+  "ip_address": "192.168.03.99",
+  "imei": "862642367608367",
+  "incremental": "C3A785E39A",
+  "--end--": "修改后可能需要重新验证设备。"
+}
