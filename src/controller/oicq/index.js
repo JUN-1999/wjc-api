@@ -1,8 +1,10 @@
 
-const { createClient } = require('icqq');
+const { createClient, Message } = require('icqq');
 const client = createClient();
 const account = 1173943332;
 const password = 'jun3290...';
+
+const user_message_map = new Map();
 
 client.on('system.login.slider', (e) => {
   console.log('输入滑块地址获取的ticket后继续。\n滑块地址:    ' + e.url);
@@ -38,18 +40,44 @@ client.login(account, password);
 // 监听群消息
 client.on('message.group', (e) => {
   if (e.group_id === 751905904) {
+    // 测试服务器
     if (e.atme) {
       e.group.sendMsg('你好世界');
     }
+
+    user_message_map.set(e.message_id, e.raw_message);
+    if (user_message_map.size > 100) {
+      const MAPKEY = user_message_map.keys().next().value; // 获取第一个key
+      user_message_map.delete(MAPKEY);// 删除第一个key对应的属性
+    }
   }
   if (e.group_id === 672340246) {
+    // 天打雷劈
     if (e.atme) {
       e.group.sendMsg('我是机器人');
       const pickMember = client.pickMember(672340246, e.sender.user_id);
-      pickMember.sendMsg('怎么了 大谷');
+      pickMember.sendMsg('怎么了 大古');
+    }
+
+    if (e.sender.user_id !== 1173943332) {
+      user_message_map.set(e.message_id, e.raw_message);
+      if (user_message_map.size > 100) {
+        const MAPKEY = user_message_map.keys().next().value; // 获取第一个key
+        user_message_map.delete(MAPKEY);// 删除第一个key对应的属性
+      }
     }
   }
 });
+// 监听群撤回
+client.on('notice.group.recall', (e) => {
+  if (e.group_id === 751905904) {
+    const group = client.pickGroup(e.group_id); // 群
+    const member = client.pickMember(e.group_id, e.user_id); // 群成员
+
+    group.sendMsg(`${member.card}：撤回了消息 【${user_message_map.get(e.message_id)}】`);
+  }
+});
+
 client.on('system.online', (e) => {
   console.log('上线了');
   // 发送吃药
@@ -58,7 +86,7 @@ client.on('system.online', (e) => {
 
 function setMessageChiYao() {
   const times = [
-    8, 12, 18
+    8, 14, 18
   ];
   let flag = false;
   const liuFriend = client.pickFriend(774725240);
