@@ -1,9 +1,17 @@
 
 const { createClient } = require('icqq');
+const {getWeatherNow} = require('../../request/weatherNow');
 const client = createClient();
-const account = 1173943332;
-const password = 'jun3290...';
+
+const accountMap = [
+  { account: 1173943332, password: 'jun3290...' },
+  { account: 2724163452, password: 'jun3290..' }
+];
+const index = 0;
+const account = accountMap[index].account;
+const password = accountMap[index].password;
 const IncludedGroup = [751905904, 672340246]; // 包含的群
+const ExcludedUser = [account];// 排除的用户
 const UserMessageMap = new Map();
 
 client.on('system.login.slider', (e) => {
@@ -38,7 +46,7 @@ client.on('system.login.device', (e) => {
 client.login(account, password);
 
 // 监听群消息
-client.on('message.group', (e) => {
+client.on('message.group', async(e) => {
   if (IncludedGroup.includes(e.group_id)) {
     if (e.atme) {
       e.group.sendMsg('我是机器人');
@@ -46,9 +54,18 @@ client.on('message.group', (e) => {
       pickMember.sendMsg('怎么了 大古');
     }
   }
-  // 聊天记录收集
-  const ExcludedUser = [1173943332];// 排除的用户
+
   if (IncludedGroup.includes(e.group_id) && !ExcludedUser.includes(e.sender.user_id)) {
+    // 如果是天气查询
+    const message = e.raw_message;
+    if (message.indexOf('天气') !== -1) {
+      console.log(message);
+      const city = message.split(' ')[1];
+      const { now } = await getWeatherNow(city);
+      e.group.sendMsg(`天气：${now.text}，温度：${now.temp}，能见度：${now.vis}，相对湿度：${now.humidity}，风速：${now.windSpeed}公里/小时，风力等级：${now.windScale}，风向：${now.windDir}`);
+    }
+
+    // 聊天记录收集
     UserMessageMap.set(e.message_id, e.raw_message);
     if (UserMessageMap.size > 100) {
       const MAPKEY = UserMessageMap.keys().next().value; // 获取第一个key
