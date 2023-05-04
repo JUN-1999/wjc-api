@@ -1,6 +1,6 @@
 
 const { createClient } = require('icqq');
-const {getWeatherNow} = require('../../request/weatherNow');
+const { getWeatherNow } = require('../../request/weatherNow');
 const client = createClient();
 
 const accountMap = [
@@ -46,7 +46,7 @@ client.on('system.login.device', (e) => {
 client.login(account, password);
 
 // 监听群消息
-client.on('message.group', async(e) => {
+client.on('message.group', async (e) => {
   if (IncludedGroup.includes(e.group_id)) {
     if (e.atme) {
       e.group.sendMsg('我是机器人');
