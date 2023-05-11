@@ -102,6 +102,13 @@ module.exports = class extends Base {
   // 登录账号
   async loginAction() {
     const { account, password } = this.post();
+    if (think.isEmpty(account)) {
+      return this.fail('账号不能为空');
+    }
+    if (think.isEmpty(password)) {
+      return this.fail('密码不能为空');
+    }
+
     // 用账号和密码去数据库验证
     const findData = this.model('User').where({ account, password }).find();
     if (!think.isEmpty(findData)) {
