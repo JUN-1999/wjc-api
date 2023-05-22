@@ -1,7 +1,7 @@
 const Base = require('../base.js');
 const nodemailer = require('nodemailer');
 const htmlToText = require('nodemailer-html-to-text').htmlToText;
-const { createToken, verifyToken } = require('./utils/token.js');
+const { createToken } = require('./utils/token.js');
 
 const sendEmail = (email) => {
   // 创建一个邮件发送器
@@ -59,6 +59,9 @@ const saveCode = async(email, code, model, that) => {
 };
 
 module.exports = class extends Base {
+  async __before() {
+
+  }
   // 判断是否账号唯一
   async isAccountOnlyAction() {
     const { account } = this.post();
@@ -110,11 +113,14 @@ module.exports = class extends Base {
     }
 
     // 用账号和密码去数据库验证
-    const findData = this.model('User').where({ account, password }).find();
+    const findData = await this.model('User').where({ account, password }).find();
     if (!think.isEmpty(findData)) {
       // 有账号
-      const token = createToken({ account, password });
-      return this.success(token);
+      const token = createToken({ USER_UUID: findData.USER_UUID, ACCOUNT: findData.ACCOUNT });
+      return this.success({
+        token,
+        userInfo: findData
+      });
     } else {
       return this.fail('账号或者密码错误');
     }

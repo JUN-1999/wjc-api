@@ -1,0 +1,1 @@
+import{aF as e}from"./index-df65ba1e.js";const o=t=>e("/treehole/article/articleList",{method:"get",params:t}),i=t=>e("/treehole/article/articleInfo",{method:"get",params:t}),c=(t,r=0)=>e("/treehole/article/updateArticle",{method:"post",data:{form:t,id:r}});export{o as a,i as g,c as u};
