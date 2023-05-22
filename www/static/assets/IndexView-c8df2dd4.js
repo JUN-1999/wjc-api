@@ -1,0 +1,1 @@
+import{d as _,c as o,b as t,o as n,l as s,_ as c}from"./index-febbbe3c.js";const a={class:"treehole"},d=_({__name:"IndexView",setup(p){return(r,i)=>{const e=s("RouterView");return n(),o("div",a,[t(e)])}}});const u=c(d,[["__scopeId","data-v-01592bc3"]]);export{u as default};
