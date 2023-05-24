@@ -52,6 +52,8 @@ module.exports = class extends Base {
     }).where({
       ARTICLE_UUID: data.article_uuid,
       FATHER_COMMENT_UUID: null
+    }).order({
+      ADD_TIME: 'DESC'
     }).field('COMMENT_UUID,COMMENT,ARTICLE_UUID,TO_USER_UUID,b.USER_UUID as USER_UUID,FATHER_COMMENT_UUID,ADD_TIME,ACCOUNT,AVATAR').select();
 
     for (const item of mainRes) {
@@ -62,6 +64,8 @@ module.exports = class extends Base {
         on: ['USER_UUID', 'b.USER_UUID']
       }).where({
         FATHER_COMMENT_UUID: item.COMMENT_UUID
+      }).order({
+        ADD_TIME: 'ASC'
       }).field('COMMENT_UUID,COMMENT,ARTICLE_UUID,TO_USER_UUID,b.USER_UUID as USER_UUID,FATHER_COMMENT_UUID,ADD_TIME,ACCOUNT,AVATAR').select();
 
       // 如果是二级
