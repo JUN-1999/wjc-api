@@ -1,7 +1,7 @@
 const Base = require('../base.js');
 const nodemailer = require('nodemailer');
 const htmlToText = require('nodemailer-html-to-text').htmlToText;
-const { createToken } = require('./utils/token.js');
+const { createToken, verifyToken } = require('./utils/token.js');
 
 const sendEmail = (email) => {
   // 创建一个邮件发送器
@@ -96,7 +96,7 @@ module.exports = class extends Base {
     if (!think.isEmpty(findData)) {
       // 查找到符合的就在用户列表中加入该条数据
       const UserModel = this.model('User');
-      await UserModel.add({ ACCOUNT: account, PASSWORD: password, EMAIL: email });
+      await UserModel.add({ ACCOUNT: account, PASSWORD: password, EMAIL: email, AVATAR: 'http://qiniu.junstart.top/2023_5_28_16395421.png' });
       return this.success('注册成功');
     } else {
       return this.fail(1, '验证码过期,请重新获取验证码');
@@ -124,5 +124,19 @@ module.exports = class extends Base {
     } else {
       return this.fail('账号或者密码错误');
     }
+  }
+  // 上传更新头像
+  async updateAvatarAction() {
+    const data = this.post();
+    think.logger.info(data.url);
+    const UserModel = this.model('User');
+    const token = this.header('authorization'); // 获取 token
+    const tokenRes = await verifyToken(token);
+    await UserModel.where({
+      USER_UUID: tokenRes.USER_UUID
+    }).update({
+      AVATAR: data.url
+    });
+    return this.success();
   }
 };
