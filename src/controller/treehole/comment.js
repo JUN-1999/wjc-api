@@ -14,6 +14,7 @@ module.exports = class extends Base {
   /*
     COMMENT_UUID        评论uuid
     COMMENT             评论内容
+    PICS                媒体内容
     ARTICLE_UUID        文章uuid
     TO_USER_UUID        回复用户uuid（@某人的时候，用户的id）
     FATHER_COMMENT_UUID  回复的哪条评论的uuid（如果是评论则为空，如果是回复，则是评论的uuid）
@@ -27,6 +28,7 @@ module.exports = class extends Base {
     const model = this.model('Comment');
     await model.add({
       COMMENT: data.comment,
+      PICS: data.PICS,
       ARTICLE_UUID: data.article_uuid,
       TO_USER_UUID: data.to_user_uuid,
       FATHER_COMMENT_UUID: data.father_comment_uuid,
@@ -51,10 +53,12 @@ module.exports = class extends Base {
       on: ['USER_UUID', 'b.USER_UUID']
     }).where({
       ARTICLE_UUID: data.article_uuid,
-      FATHER_COMMENT_UUID: null
+      FATHER_COMMENT_UUID: ''
     }).order({
       ADD_TIME: 'DESC'
-    }).field('COMMENT_UUID,COMMENT,ARTICLE_UUID,TO_USER_UUID,b.USER_UUID as USER_UUID,FATHER_COMMENT_UUID,ADD_TIME,ACCOUNT,AVATAR').select();
+    }).field('COMMENT_UUID,COMMENT,ARTICLE_UUID,TO_USER_UUID,b.USER_UUID as USER_UUID,FATHER_COMMENT_UUID,ADD_TIME,ACCOUNT,AVATAR,PICS').select();
+
+    think.logger.info('mainRes', mainRes);
 
     for (const item of mainRes) {
       const minorRes = await model.join({
@@ -66,7 +70,7 @@ module.exports = class extends Base {
         FATHER_COMMENT_UUID: item.COMMENT_UUID
       }).order({
         ADD_TIME: 'ASC'
-      }).field('COMMENT_UUID,COMMENT,ARTICLE_UUID,TO_USER_UUID,b.USER_UUID as USER_UUID,FATHER_COMMENT_UUID,ADD_TIME,ACCOUNT,AVATAR').select();
+      }).field('COMMENT_UUID,COMMENT,ARTICLE_UUID,TO_USER_UUID,b.USER_UUID as USER_UUID,FATHER_COMMENT_UUID,ADD_TIME,ACCOUNT,AVATAR,PICS').select();
 
       // 如果是二级
       for (const minorItem of minorRes) {

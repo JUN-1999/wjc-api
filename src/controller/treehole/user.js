@@ -128,7 +128,6 @@ module.exports = class extends Base {
   // 上传更新头像
   async updateAvatarAction() {
     const data = this.post();
-    think.logger.info(data.url);
     const UserModel = this.model('User');
     const token = this.header('authorization'); // 获取 token
     const tokenRes = await verifyToken(token);
@@ -137,6 +136,50 @@ module.exports = class extends Base {
     }).update({
       AVATAR: data.url
     });
+    return this.success();
+  }
+
+  // 获得关注的文章列表
+  async getUserFllowAction() {
+    const UserModel = this.model('User');
+    const token = this.header('authorization'); // 获取 token
+    const tokenRes = await verifyToken(token);
+    const res = await UserModel.where({
+      USER_UUID: tokenRes.USER_UUID
+    }).field('FOLLOW').find();
+    if (think.isEmpty(res)) {
+      return this.success('[]');
+    } else {
+      return this.success(res.FOLLOW);
+    }
+  }
+  // 关注或取消关注某个文章
+  async fllowAction() {
+    const post = this.post();
+    const UserModel = this.model('User');
+    const token = this.header('authorization'); // 获取 token
+    const tokenRes = await verifyToken(token);
+    let { FOLLOW: arr } = await UserModel.where({
+      USER_UUID: tokenRes.USER_UUID
+    }).field('FOLLOW').find();
+    arr = JSON.parse(arr);
+
+    const id = post.id;// 文章的id
+    if (think.isEmpty(arr)) arr = [];
+    if (arr.includes(id)) {
+      // 包含id则过滤id
+      arr = arr.filter(item => item !== id);
+    } else {
+      // 不包含就加入
+      arr.push(id);
+    }
+    arr = JSON.stringify(arr);
+    await UserModel.where({
+      USER_UUID: tokenRes.USER_UUID
+    }).update({
+      FOLLOW: arr
+    });
+
     return this.success();
   }
 };
