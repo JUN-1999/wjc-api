@@ -23,12 +23,10 @@ module.exports = class extends Base {
     let type = '';
 
     const { file } = this.file();
-    const imgregex = /^.*\.(jpg|jpeg|png|gif|bmp)$/;
-    const videoregex = /^.*\.(mp4|avi|mov|flv|wmv|webm)$/;
 
-    if (imgregex.test(file.name)) {
+    if (file.type.includes('image')) {
       type = 'img';
-    } else if (videoregex.test(file.name)) {
+    } else if (file.type.includes('video')) {
       type = 'video';
     } else {
       return this.fail('文件格式不正确');
