@@ -19,7 +19,7 @@ module.exports = class extends Base {
     const token = this.header('authorization'); // 获取 token
     const tokenRes = await verifyToken(token);
     const model = this.model('Article');
-    if (data.id === 0) {
+    if (data.id === 0 || data.id === '0') {
       // 新增操作
       const res = await model.add({
         TITLE: title,
