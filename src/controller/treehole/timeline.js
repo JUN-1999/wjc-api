@@ -46,4 +46,17 @@ module.exports = class extends Base {
     }).order('TIME ASC').select();
     return this.success(res);
   }
+  // 获取时间轴id
+  async getTimeLineIDAction() {
+    const data = this.post();
+    const model = this.model('TimerLine');
+    const res = await model.where({
+      'ARTICLE_UUID': data.ARTICLE_UUID
+    }).field('COMMENT_UUID').select();
+    const list = [];
+    res.forEach(item => {
+      list.push(item.COMMENT_UUID);
+    });
+    return this.success(list);
+  }
 };
