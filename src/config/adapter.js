@@ -6,6 +6,7 @@ const { Console, File, DateFile } = require('think-logger3');
 const path = require('path');
 const isDev = think.env === 'development';
 const socketio = require('think-websocket-socket.io');
+const ws = require('think-websocket-ws');
 /**
  * cache adapter config
  * @type {Object}
@@ -109,21 +110,19 @@ exports.logger = {
 };
 
 exports.websocket = {
-  type: 'socketio',
+  // type: 'socketio',
+  type: 'ws',
   common: {
     // common config
   },
-  socketio: {
-    handle: socketio,
-    allowOrigin: '', // 默认所有的域名都允许访问
-    path: '', // 默认 '/socket.io'
-    adapter: null, // 默认无 adapter
+
+  ws: {
+    handle: ws,
+    path: '/ws',
     messages: {
       open: '/websocket/open', // 建立连接时处理对应到 websocket Controller 下的 open Action
       close: '/websocket/close', // 关闭连接时处理的 Action
-      setMessage: '/websocket/setMessage', // 发送信息
-      message: '/websocket/message', // 发送信息
-      room: '/websocket/room' // 进入房间
+      send: '/websocket/send'
     }
   }
 };

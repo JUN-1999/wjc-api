@@ -7,74 +7,22 @@ module.exports = class extends think.Controller {
     global.$socketChat.io = this.io;
   }
   // 开启了链接
-  openAction() {
-    // think.logger.info('opend');
-    // think.logger.info('获取客户端opend事件发送的数据', this.wsData);
-
-    // 单个发送
-    this.emit('opend', '开启了链接');
-  }
-
-  async roomAction() {
-    global.$socketChat[this.socket.id] = {
-      nickname: this.wsData.nickname,
-      socket: this.socket
-    };
-
-    // 存储房间信息
-    if (global.rooms[this.wsData.room]) {
-      global.rooms[this.wsData.room][this.socket.id] = {
-        nickname: this.wsData.nickname,
-        socket: this.socket
-      };
-    } else {
-      global.rooms[this.wsData.room] = {
-        [this.socket.id]: {
-          nickname: this.wsData.nickname,
-          socket: this.socket
-        }
-      };
-    }
-    think.logger.info(global.rooms);
-    this.socket.broadcast.emit('room', {
-      nickname: this.wsData.nickname,
-      type: 'in',
-      id: this.socket.id,
-      room: this.wsData.room
-    });
-  }
-
-  // 发送信息
-  // setMessageAction() {
-  //   think.logger.info('setMessage');
-  //   think.logger.info('获取客户端 setMessage 事件发送的数据', this.wsData);
-  //   // think.logger.info('获取当前 WebSocket 对象', this.websocket);
-  //   // think.logger.info('判断当前请求是否是 WebSocket 请求', this.isWebsocket);
-  //   // this.emit('getMessage', this.wsData);
-  //   // 广播
-  //   this.broadcast('getMessage', this.wsData);
-  // }
-
-  messageAction() {
-    this.io.emit('message', {
-      nickname: this.wsData.nickname,
-      type: 'message',
-      message: this.wsData.message,
-      id: this.socket.id,
-      room: this.wsData.room
-    });
+  async openAction() {
+    think.logger.info('ws open');
+    return this.success();
   }
 
   async closeAction() {
-    const closeSocket = global.$socketChat[this.socket.id];
-    const nickname = closeSocket && closeSocket.nickname;
-    this.socket.disconnect(true);
-    this.socket.removeAllListeners();
-    this.socket.broadcast.emit('room', {
-      nickname,
-      type: 'out',
-      id: this.socket.id
-    });
-    delete global.$socketChat[this.socket.id];
+    think.logger.info('ws close');
+    return this.success();
+  }
+
+  async sendAction() {
+    think.logger.info('发送来的信息');
+    think.logger.info(this.wsData); // this.req.websocketData, 'thinkjs'
+    think.logger.info(this.websocket); // this.req.websocket, websocket instance
+    think.logger.info(this.isWebsocket); // this.isMethod('WEBSOCKET'), true
+    this.emit('sendMessage', 'This client opened successfully!');
+    return this.success();
   }
 };
