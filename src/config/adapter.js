@@ -122,7 +122,7 @@ exports.websocket = {
     messages: {
       open: '/websocket/open', // 建立连接时处理对应到 websocket Controller 下的 open Action
       close: '/websocket/close', // 关闭连接时处理的 Action
-      send: '/websocket/send'
+      sendChatRoom: '/websocket/sendChatRoom' // 聊天室
     }
   }
 };

@@ -1,4 +1,7 @@
 require('./global');
+const webSocketList = {
+  chatRoom: new Map()
+};
 module.exports = class extends think.Controller {
   constructor(...arg) {
     super(...arg);
@@ -17,12 +20,19 @@ module.exports = class extends think.Controller {
     return this.success();
   }
 
-  async sendAction() {
+  async sendChatRoomAction() {
     think.logger.info('发送来的信息');
-    think.logger.info(this.wsData); // this.req.websocketData, 'thinkjs'
-    think.logger.info(this.websocket); // this.req.websocket, websocket instance
-    think.logger.info(this.isWebsocket); // this.isMethod('WEBSOCKET'), true
-    this.emit('sendMessage', 'This client opened successfully!');
-    return this.success();
+    think.logger.info('wsData', this.wsData); // 传送过来的数据
+    think.logger.info('websocket', this.websocket); // 通信的websocket对象
+    think.logger.info('isWebsocket', this.isWebsocket); // 是否为websocket通信
+
+    // 判断chatRoom里面  不存在就添加
+    if (!webSocketList.chatRoom.has(this.wsData.data.useruuid)) {
+      webSocketList.chatRoom.set(this.wsData.data.useruuid, this.websocket);
+    }
+    think.logger.info('webSocketList.chatRoom', webSocketList.chatRoom);
+    for (const websocketItem of webSocketList.chatRoom.values()) {
+      websocketItem.send(JSON.stringify(this.wsData.data));
+    }
   }
 };
