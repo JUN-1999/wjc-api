@@ -10,6 +10,10 @@ module.exports = class extends think.Controller {
   // 开启了链接
   async openAction() {
     think.logger.info('ws open');
+    // think.logger.info('发送来的信息');
+    // think.logger.info('wsData', this.wsData); // 传送过来的数据
+    // think.logger.info('websocket', this.websocket); // 通信的websocket对象
+    // think.logger.info('isWebsocket', this.isWebsocket); // 是否为websocket通信
     return this.success();
   }
 
@@ -17,25 +21,27 @@ module.exports = class extends think.Controller {
     think.logger.info('ws close');
     return this.success();
   }
+  // 心跳检测
+  async heartbeatAction() {
+    this.emit('pink');
+  }
 
-  async sendChatRoomAction() {
-    // think.logger.info('发送来的信息');
-    // think.logger.info('wsData', this.wsData); // 传送过来的数据
-    // think.logger.info('websocket', this.websocket); // 通信的websocket对象
-    // think.logger.info('isWebsocket', this.isWebsocket); // 是否为websocket通信
-
-    // 判断chatRoom里面  不存在就添加
+  // 聊天室 - 加入房间
+  async joinChatRoomAction() {
     if (!webSocketList.chatRoom.has(this.wsData.data.useruuid)) {
       webSocketList.chatRoom.set(this.wsData.data.useruuid, this.websocket);
     }
-    think.logger.info('webSocketList.chatRoom', webSocketList.chatRoom);
-    for (const websocketItem of webSocketList.chatRoom.values()) {
-      websocketItem.send(JSON.stringify(this.wsData.data));
-    }
   }
+  // 聊天室 - 退出房间
   async closeChatRoomAction() {
     if (webSocketList.chatRoom.has(this.wsData.data.useruuid)) {
       webSocketList.chatRoom.delete(this.wsData.data.useruuid);
+    }
+  }
+  // 聊天室 -发送信息
+  async sendChatRoomAction() {
+    for (const websocketItem of webSocketList.chatRoom.values()) {
+      websocketItem.send(JSON.stringify(this.wsData.data));
     }
   }
 };

@@ -116,17 +116,16 @@ exports.websocket = {
     // common config
 
   },
-
   ws: {
     handle: ws,
-
     path: '/ws',
-    adapter: null,
     messages: {
       open: '/websocket/open', // 建立连接时处理对应到 websocket Controller 下的 open Action
       close: '/websocket/close', // 关闭连接时处理的 Action
-      sendChatRoom: '/websocket/sendChatRoom', // 聊天室-发送信息
-      closeChatRoom: '/websocket/sendChatRoom' // 聊天室-关闭
+      heartbeat: '/websocket/heartbeat', // 心跳检验
+      joinChatRoom: '/websocket/joinChatRoom', // 聊天室 - 加入
+      closeChatRoom: '/websocket/closeChatRoom', // 聊天室 - 退出
+      sendChatRoom: '/websocket/sendChatRoom' // 聊天室-发送信息
 
     }
   }
