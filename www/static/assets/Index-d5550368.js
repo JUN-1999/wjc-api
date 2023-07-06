@@ -1,0 +1,1 @@
+import{d as n,e as a,j as s,k as d,o as l,l as m,m as r}from"./index-9fdd5184.js";const _=n({__name:"Index",setup(c){const o=a();return s(async()=>{d.get("https://qiniu.junstart.top/md/note.md").then(e=>{console.log(e),o.value=e.data})}),(e,p)=>{const t=r("v-md-editor");return l(),m(t,{"model-value":o.value,mode:"preview"},null,8,["model-value"])}}});export{_ as default};
